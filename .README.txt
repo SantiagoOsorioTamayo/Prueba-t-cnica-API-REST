@@ -1,0 +1,150 @@
+SISTEMA DE VOTACIONES - API REST
+
+DESCRIPCION DEL PROYECTO
+
+API RESTful para gestionar un sistema de votaciones desarrollada en Java con Spring Boot. Permite registrar votantes y candidatos, emitir votos únicos por votante, y consultar estadísticas en tiempo real.
+
+TECNOLOGIAS UTILIZADAS
+
+- Java 21.0.11 LTS como lenguaje de programacion principal.
+- Spring Boot 3.3.5 como framework principal.
+- Spring Data JPA 3.3.5 para la persistencia de datos.
+- Spring Security 3.3.5 para la autenticacion y seguridad.
+- MySQL 9.7.1 como base de datos relacional. 
+- Maven 3.9.6 como gestor de dependencias.
+- Postman para las pruebas de API.
+
+EXTENSIONES DE VS CODE RECOMENDADAS
+
+- Extension Pack for Java para soporte completo de Java.
+- Spring Boot Extension Pack para herramientas de Spring Boot.
+- Lombok Annotations Support para soporte de Lombok.
+- MySQL para conexion a base de datos.
+- REST Client para pruebas de API desde VS Code.
+- Maven for Java para soporte de Maven.
+
+LICENCIA
+
+Este proyecto esta bajo la Licencia Apache 2.0.
+
+REQUISITOS PREVIOS
+
+Antes de ejecutar el proyecto, necesitas tener instalado Java 21 (Java 21.0.11), MySQL 8.0 o superior, Maven 3.8 o superior, y Postman para las pruebas.
+
+CONFIGURACION DE LA BASE DE DATOS
+
+Primero debes conectarte a MySQL con el comando mysql -u root -p. Luego debes crear la base de datos con el comando CREATE DATABASE votaciones_db; , además, usa la base de datos con el comando USE votaciones_db; . Finalmente sales de MySQL con EXIT.
+
+CONFIGURACION DEL PROYECTO
+
+Debes editar el archivo application.properties ubicado en src/main/resources. En este archivo debes configurar la URL de conexión a MySQL con spring.datasource.url. La URL por defecto es jdbc:mysql://localhost:3306/votaciones_db con los parametros useSSL=false, serverTimezone=America/Bogota y allowPublicKeyRetrieval=true. Debes configurar el usuario de MySQL con spring.datasource.username=root. Debes configurar tu contraseña de MySQL con spring.datasource.password=TU_CONTRASEÑA (reemplaza TU_CONTRASEÑA por la contraseña que tengas en tu sesión de MySQL). La configuración de JPA incluye spring.jpa.hibernate.ddl-auto=update para que las tablas se creen automáticamente. spring.jpa.show-sql=true muestra las consultas SQL en consola. El dialecto configurado es org.hibernate.dialect.MySQLDialect. El servidor corre en el puerto 8080. Las credenciales de autenticación son spring.security.user.name=user y spring.security.user.password=user2026*. El nivel de logging esta en DEBUG para facilitar la depuración.
+
+EJECUCION DEL PROYECTO
+
+Desde el simbolo del sistema, navega a la carpeta del proyecto con el comando cd RUTA (reemplaza RUTA con la ruta en donde guardaste el proyecto)y ejecuta los siguientes comandos:
+- Ejecuta mvnw.cmd clean para limpiar el proyecto.
+- Luego mvnw.cmd compile -DskipTests para compilar sin ejecutar pruebas.
+- Finalmente mvnw.cmd spring-boot:run para ejecutar la aplicacion.
+
+La aplicación estará corriendo cuando ves el mensaje SPRING.
+
+ENDPOINTS DE LA API
+
+Todos los endpoints requieren autenticación Basic Auth. El usuario es user y la contraseña es user2026*.
+
+Para votantes, los endpoints disponibles son:
+- POST http://localhost:8080/api/voters para registrar un nuevo votante.
+- GET http://localhost:8080/api/voters para obtener la lista de votantes.
+- GET http://localhost:8080/api/voters/{id} para obtener un votante por ID.
+- DELETE http://localhost:8080/api/voters/{id} para eliminar un votante.
+
+Para candidatos, los endpoints disponibles son:
+- POST http://localhost:8080/api/candidates para registrar un nuevo candidato.
+- GET http://localhost:8080/api/candidates para obtener la lista de candidatos.
+- GET http://localhost:8080/api/candidates/{id} para obtener un candidato por ID.
+- DELETE http://localhost:8080/api/candidates/{id} para eliminar un candidato.
+
+Para votos, los endpoints disponibles son:
+- POST http://localhost:8080/api/votes con los parametros voterId y candidateId para emitir un voto
+- GET http://localhost:8080/api/votes para obtener todos los votos emitidos.
+- GET http://localhost:8080/api/votes/statistics para obtener las estadisticas de la votacion.
+
+GUIA DE PRUEBAS EN POSTMAN
+
+Primero debes crear una coleccion llamada Sistema de Votaciones. Configura la variable baseUrl con el valor http://localhost:8080/api. . Luego puedes crear las peticiones.
+
+Antes de registrar debes tener en cuenta lo siguiente:
+- Configura la autenticacion Basic Auth con usuario user y contraseña user2026*
+- Agrega dentro de los campos de header: Content-Type como Key y application/json como Value.
+
+Para registrar un votante, haz una peticion POST a {{baseUrl}}/voters como por ejemplo:
+
+{
+  "name": "ejemplo",
+  "email": "ejemplo@email.com"
+}
+
+La respuesta esperada es 201 Created con los datos del votante creado.
+
+Para registrar un candidato, haz una peticion POST a {{baseUrl}}/candidates como por ejemplo:
+
+{
+  "name": "ejemplo",
+  "party": "Partido Ejemplo"
+}
+
+La respuesta esperada es 201 Created con los datos del candidato creado.
+
+Para listar votantes, haz una peticion GET a {{baseUrl}}/voters. La respuesta esperada es 200 OK con un arreglo de votantes.
+
+Para listar candidatos, haz una peticion GET a {{baseUrl}}/candidates. La respuesta esperada es 200 OK con un arreglo de candidatos.
+
+Para emitir un voto, haz una peticion POST a {{baseUrl}}/votes con los parametros voterId y candidateId, por ejemplo:
+
+POST http://localhost:8080/api/votes?voterId=1&candidateId=1
+
+La respuesta esperada es 201 Created sin cuerpo.
+
+Para ver estadisticas, haz una peticion GET a {{baseUrl}}/votes/statistics:
+
+GET http://localhost:8080/api/votes/statistics 
+
+La respuesta esperada es 200 OK con los resultados de la votacion, total de votantes, total de votos emitidos y porcentaje de participacion.
+
+Para eliminar un votante, haz una petición DELETE a {{baseUrl}}/voters/{id}, por ejemplo:
+
+DELETE http://localhost:8080/api/voters/4
+
+La respuesta esperada es 204 No Content. 
+NOTA: Los votantes que ya han emitido votos no pueden ser eliminados directamente.
+
+Para eliminar un candidato, haz una petición DELETE a {{baseUrl}}/candidates/{id}, por ejemplo:
+
+DELETE http://localhost:8080/api/candidates/3
+
+La respuesta esperada es 204 No Content. 
+NOTA: Los candidatos que ya tienen votos no pueden ser eliminados directamente.
+
+PROBLEMAS COMUNES Y SOLUCIONES
+
+- Si ves error 403 Forbidden, verifica que el usuario y contraseña en Postman sean correctos.
+- Si ves error 500 al eliminar, significa que el votante o candidato tiene votos asociados.
+- Si no se conecta a MySQL, verifica que el servicio de MySQL este corriendo.
+- Si hay error de compilación, ejecuta mvnw.cmd clean compile -DskipTests.
+- Si el puerto 8080 esta en uso, cambia la propiedad server.port en application.properties.
+
+VALIDACIONES DEL SISTEMA
+
+- El sistema valida que el email no este duplicado al registrar un votante, mostrando error 400 con el mensaje "El email ya está registrado". 
+- Valida que un votante no pueda votar dos veces, mostrando error 400 con el mensaje "El votante ya ha emitido su voto".
+- Valida que el votante exista al emitir un voto, mostrando error 404 con el mensaje "Votante no encontrado".
+- Valida que el candidato exista al emitir un voto, mostrando error 404 con el mensaje "Candidato no encontrado".
+- También valida que el email tenga un formato valido, mostrando error 400 con el mensaje "Email debe ser válido".
+
+CAPTURAS DE PANTALLA DE LAS ESTADÍSTICAS GENERADAS
+
+La captura de pantalla está adjunta en la carpeta "Screenshots".
+
+DETENER LA APLICACION
+
+Para detener la aplicación, presiona Ctrl + C en la terminal donde está corriendo. Aparecerá una pregunta con dos opciones de respuesta (S/N). Usa S para finalizar.
