@@ -177,7 +177,7 @@ VALIDACIONES DEL SISTEMA
 
 CAPTURAS DE PANTALLA DE LAS ESTADÍSTICAS GENERADAS
 
-La captura de pantalla está adjunta en la carpeta "Screenshots".
+Las capturas de pantalla están adjuntas en la carpeta "Screenshots".
 
 DETENER LA APLICACION
 
