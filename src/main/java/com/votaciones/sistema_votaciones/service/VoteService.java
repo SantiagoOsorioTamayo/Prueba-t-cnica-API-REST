@@ -21,7 +21,7 @@ public class VoteService {
     private final VoterRepository voterRepository;
     private final CandidateRepository candidateRepository;
     
-    // Constructor para inyección de dependencias (reemplaza @RequiredArgsConstructor)
+    // Constructor para inyección de dependencias
     public VoteService(VoteRepository voteRepository, VoterRepository voterRepository, CandidateRepository candidateRepository) {
         this.voteRepository = voteRepository;
         this.voterRepository = voterRepository;
