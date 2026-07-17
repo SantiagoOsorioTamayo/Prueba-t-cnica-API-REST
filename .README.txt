@@ -12,13 +12,13 @@ TECNOLOGIAS UTILIZADAS
 - Spring Security 3.3.5 para la autenticacion y seguridad.
 - MySQL 9.7.1 como base de datos relacional. 
 - Maven 3.9.6 como gestor de dependencias.
+- Swagger (springdoc-openapi 2.6.0) para la documentacion interactiva de la API.
 - Postman para las pruebas de API.
 
 EXTENSIONES DE VS CODE RECOMENDADAS
 
 - Extension Pack for Java para soporte completo de Java.
 - Spring Boot Extension Pack para herramientas de Spring Boot.
-- Lombok Annotations Support para soporte de Lombok.
 - MySQL para conexion a base de datos.
 - REST Client para pruebas de API desde VS Code.
 - Maven for Java para soporte de Maven.
@@ -46,32 +46,66 @@ Desde el simbolo del sistema, navega a la carpeta del proyecto con el comando cd
 - Luego mvnw.cmd compile -DskipTests para compilar sin ejecutar pruebas.
 - Finalmente mvnw.cmd spring-boot:run para ejecutar la aplicacion.
 
-La aplicación estará corriendo cuando ves el mensaje SPRING.
+La aplicación estará corriendo cuando ves el mensaje: Started SistemaVotacionesApplication in X.X seconds.
 
 ENDPOINTS DE LA API
 
 Todos los endpoints requieren autenticación Basic Auth. El usuario es user y la contraseña es user2026*.
 
 Para votantes, los endpoints disponibles son:
-- POST http://localhost:8080/api/voters para registrar un nuevo votante.
-- GET http://localhost:8080/api/voters para obtener la lista de votantes.
-- GET http://localhost:8080/api/voters/{id} para obtener un votante por ID.
-- DELETE http://localhost:8080/api/voters/{id} para eliminar un votante.
+- POST /api/voters para registrar un nuevo votante.
+- GET /api/voters para obtener la lista de votantes.
+- GET /api/voters/{id} para obtener un votante por ID.
+- DELETE /api/voters/{id} para eliminar un votante.
 
 Para candidatos, los endpoints disponibles son:
-- POST http://localhost:8080/api/candidates para registrar un nuevo candidato.
-- GET http://localhost:8080/api/candidates para obtener la lista de candidatos.
-- GET http://localhost:8080/api/candidates/{id} para obtener un candidato por ID.
-- DELETE http://localhost:8080/api/candidates/{id} para eliminar un candidato.
+- POST /api/candidates para registrar un nuevo candidato.
+- GET /api/candidates para obtener la lista de candidatos.
+- GET /api/candidates/{id} para obtener un candidato por ID.
+- DELETE /api/candidates/{id} para eliminar un candidato.
 
 Para votos, los endpoints disponibles son:
-- POST http://localhost:8080/api/votes con los parametros voterId y candidateId para emitir un voto
-- GET http://localhost:8080/api/votes para obtener todos los votos emitidos.
-- GET http://localhost:8080/api/votes/statistics para obtener las estadisticas de la votacion.
+- POST /api/votes con los parametros voterId y candidateId para emitir un voto
+- GET /api/votes para obtener todos los votos emitidos.
+- GET /api/votes/statistics para obtener las estadisticas de la votacion.
+
+GUIA DE PRUEBAS EN SWAGGER
+
+Abre tu navegador web e ingresa la siguiente URL:
+
+http://localhost:8080/swagger-ui.html
+
+Si te pide iniciar sesión, usa las siguientes credenciales:
+- Usuario: user
+- Contraseña: user2026*
+
+Después, podras ver el index del swagger junto con los botones de las peticiones de cada clase.
+
+A continuación, si quieres usar los botones GET, despliega la ventana del GET que quieras usar y haz click en el botón "Try it out", luego, al botón "Execute". Más abajo en el bloque "Response body" podrás ver el resultado (este bloque también aparece en las demás peticiones). Por otro lado, para los botones GET para buscar por ID, al darle click a "Try it out", aparecerá un bloque "id" donde podrás poner la ID del registro existente que necesites (NOTA: ten en cuenta que este y demás bloques no te permitirán escribir hasta que no des click en "Try it out").
+
+Después, si quieres usar los botones POST, despliega la ventana del POST que quieras usar y haz click en el botón "Try it out". Aparecerán los bloques donde podrás agregar los registros. Luego, para agregar los registros haz lo siguiente, para después darle click al botón "Execute":
+
+- Para los registros de "Voter-controller", usa los JSON de esta forma:
+
+{
+  "name": "ejemplo",
+  "email": "ejemplo@email.com"
+}
+
+- Para los registros de "Candidate-controller", usa los JSON de esta forma:
+
+{
+  "name": "string",
+  "party": "string"
+}
+
+- En el caso de "Vote-controller", te pedirá un "voterId" referenciando a la ID de un votante existente, y un "candidateId" a la ID de un candidato existente. Agrega las ID existentes del votante y el candidato al que se votó.
+
+Finalmente, para los botones DELETE, despliega la ventana del DELETE que quieras usar y haz click en el botón "Try it out". Luego, en el bloque "id", escribe la ID del registro que quieras borrar. Al final, da click al botón "Execute" (NOTA: Los registros que tienen votos asociados no podrán ser borrados, es decir, no es posible borrar los votantes que votaron ni los candidatos que han sido votados).
 
 GUIA DE PRUEBAS EN POSTMAN
 
-Primero debes crear una coleccion llamada Sistema de Votaciones. Configura la variable baseUrl con el valor http://localhost:8080/api. . Luego puedes crear las peticiones.
+Primero debes crear una coleccion llamada Sistema de Votaciones. Configura la variable baseUrl con el valor http://localhost:8080/api. Luego puedes crear las peticiones.
 
 Antes de registrar debes tener en cuenta lo siguiente:
 - Configura la autenticacion Basic Auth con usuario user y contraseña user2026*
