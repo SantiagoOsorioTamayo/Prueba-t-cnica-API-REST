@@ -15,7 +15,7 @@ public class CandidateService {
     
     private final CandidateRepository candidateRepository;
     
-    // Constructor para inyección de dependencias (reemplaza @RequiredArgsConstructor)
+    // Constructor para inyección de dependencias
     public CandidateService(CandidateRepository candidateRepository) {
         this.candidateRepository = candidateRepository;
     }
